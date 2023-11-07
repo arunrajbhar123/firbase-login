@@ -11,7 +11,8 @@
         android:id="@+id/loginBtn"
         android:layout_width="240dp"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true" />
+        android:layout_centerInParent="true"
+     />
 
     <ProgressBar
         android:id="@+id/progress_circular"

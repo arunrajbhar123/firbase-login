@@ -126,6 +126,7 @@ public class Login extends AppCompatActivity {
         showError.setText("Something is wrong." + error);
         showError.setVisibility(View.VISIBLE);
         loginBtn.setEnabled(true);
+        progressBar.setVisibility(View.GONE);
     }
 
     private void changeActivity(FirebaseUser user) {
