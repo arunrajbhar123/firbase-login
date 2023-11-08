@@ -4,18 +4,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.Login">
+    tools:context=".ui.Login"
+    tools:ignore="HardCodedText">
 
 
     <com.google.android.gms.common.SignInButton
         android:id="@+id/loginBtn"
         android:layout_width="240dp"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-     />
+        android:layout_centerInParent="true" />
+
 
     <ProgressBar
-        android:id="@+id/progress_circular"
+        android:id="@+id/progressBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/loginBtn"

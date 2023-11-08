@@ -13,11 +13,13 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.loginflow.R;
+import com.example.loginflow.databinding.ActivityLoginBinding;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -28,26 +30,28 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
 public class Login extends AppCompatActivity {
 
-    SignInButton loginBtn;
-    ProgressBar progressBar;
+
     FirebaseAuth auth;
-    TextView showError;
+
     GoogleSignInClient mGoogleSignInClient;
+
+    ActivityLoginBinding binding;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        binding = ActivityLoginBinding.inflate(getLayoutInflater());
+        View view = binding.getRoot();
 
-        loginBtn = findViewById(R.id.loginBtn);
-        progressBar = findViewById(R.id.progress_circular);
-        showError = findViewById(R.id.showError);
+        setContentView(view);
 
 
         auth = FirebaseAuth.getInstance();
@@ -61,15 +65,16 @@ public class Login extends AppCompatActivity {
 
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
-        loginBtn.setOnClickListener(new View.OnClickListener() {
+        binding.loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                progressBar.setVisibility(View.VISIBLE);
-                loginBtn.setEnabled(false);
+                binding.progressBar.setVisibility(View.VISIBLE);
+                binding.loginBtn.setEnabled(false);
                 Intent signIn = mGoogleSignInClient.getSignInIntent();
                 launcher.launch(signIn);
             }
         });
+
 
     }
 
@@ -79,12 +84,13 @@ public class Login extends AppCompatActivity {
             if (o.getResultCode() == Activity.RESULT_OK) {
                 Intent data = o.getData();
                 handleGoogleSignInResult(data);
-                showError.setVisibility(View.GONE);
+                binding.showError.setVisibility(View.GONE);
 
             } else {
                 showError("from launcher");
             }
         }
+
 
         private void handleGoogleSignInResult(Intent data) {
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
@@ -102,14 +108,10 @@ public class Login extends AppCompatActivity {
             }
         }
 
+
         private void firebaseAuth(String idToken) {
             AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
 
-            SharedPreferences sharedPreferences = getSharedPreferences("token", MODE_PRIVATE);
-
-            SharedPreferences.Editor myEdit = sharedPreferences.edit();
-            myEdit.putString("token", idToken);
-            myEdit.apply();
             auth.signInWithCredential(credential).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
@@ -129,10 +131,10 @@ public class Login extends AppCompatActivity {
 
 
     private void showError(String error) {
-        showError.setText("Something is wrong." + error);
-        showError.setVisibility(View.VISIBLE);
-        loginBtn.setEnabled(true);
-        progressBar.setVisibility(View.GONE);
+        binding.showError.setText("Something is wrong." + error);
+        binding.showError.setVisibility(View.VISIBLE);
+        binding.loginBtn.setEnabled(true);
+        binding.progressBar.setVisibility(View.GONE);
     }
 
     private void changeActivity(FirebaseUser user) {

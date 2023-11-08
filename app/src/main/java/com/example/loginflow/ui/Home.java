@@ -1,48 +1,36 @@
 package com.example.loginflow.ui;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-
-import android.text.Spannable;
-import android.text.SpannableString;
-import android.text.method.LinkMovementMethod;
-import android.text.style.ClickableSpan;
 import android.view.View;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
-
-import com.example.loginflow.R;
+import com.example.loginflow.databinding.ActivityHomeBinding;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GetTokenResult;
 import com.squareup.picasso.Picasso;
 
 public class Home extends AppCompatActivity {
 
     FirebaseAuth auth;
-    TextView name, email, phone, token;
-    ImageView photo;
-    Button logout;
+    ActivityHomeBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home);
+        binding = ActivityHomeBinding.inflate(getLayoutInflater());
+        View view = binding.getRoot();
+        setContentView(view);
 
-        name = findViewById(R.id.name);
-        email = findViewById(R.id.email);
-        phone = findViewById(R.id.phone);
-        token = findViewById(R.id.token);
-        photo = findViewById(R.id.userPhoto);
-        logout = findViewById(R.id.logout);
 
         auth = FirebaseAuth.getInstance();
         if (auth.getCurrentUser() == null || auth == null) {
@@ -51,33 +39,37 @@ public class Home extends AppCompatActivity {
         }
 
         FirebaseUser user = auth.getCurrentUser();
-        name.setText(String.format("Name : %s", user.getDisplayName()));
-        email.setText(String.format("Email : " + user.getEmail()));
+        binding.name.setText(String.format("Name : %s", user.getDisplayName()));
+        binding.email.setText(String.format("Email : " + user.getEmail()));
 
-        SharedPreferences sh = getSharedPreferences("token", MODE_PRIVATE);
-        String idToken = sh.getString("token", "");
+        user.getIdToken(true).addOnCompleteListener(new OnCompleteListener<GetTokenResult>() {
+            @Override
+            public void onComplete(@NonNull Task<GetTokenResult> task) {
+                if (task.isSuccessful()) {
+                    binding.token.setText("Token " + ":" + task.getResult().getToken());
+                } else {
+                    System.out.println("Token : null ");
+                }
+            }
+        });
 
-        token.setText("Token " + ":" + idToken);
 
+        Picasso.get().load(user.getPhotoUrl()).into(binding.userPhoto);
 
-        Picasso.get().load(user.getPhotoUrl()).into(photo);
-
-        logout.setOnClickListener(new View.OnClickListener() {
+        binding.logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                auth.signOut();
+                FirebaseAuth.getInstance().signOut();
                 redirectToLogin();
             }
         });
 
 
-        ImageView copyImage = findViewById(R.id.copyToken);
-
-        copyImage.setOnClickListener(new View.OnClickListener() {
+        binding.copyToken.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-                ClipData clip = ClipData.newPlainText("Copied Text", idToken);
+                ClipData clip = ClipData.newPlainText("Copied Text", binding.token.getText());
 
                 clipboard.setPrimaryClip(clip);
                 Toast.makeText(Home.this, "Token copied", Toast.LENGTH_SHORT).show();
