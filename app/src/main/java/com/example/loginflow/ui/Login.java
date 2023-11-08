@@ -130,8 +130,9 @@ public class Login extends AppCompatActivity {
     }
 
     private void changeActivity(FirebaseUser user) {
+
         Intent intent = new Intent(Login.this, Home.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
+        finish();
     }
 }
