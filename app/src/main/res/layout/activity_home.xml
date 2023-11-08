@@ -1,86 +1,115 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ui.Home">
-
-    <androidx.cardview.widget.CardView
-        android:id="@+id/image_cardView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="23dp"
-        app:cardCornerRadius="12dp">
-
-        <ImageView
-            android:id="@+id/userPhoto"
-            android:layout_width="120dp"
-            android:layout_height="120dp"
-            android:src="@drawable/ic_launcher_background" />
-
-    </androidx.cardview.widget.CardView>
+    android:layout_height="match_parent">
 
     <RelativeLayout
-        android:id="@+id/details"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/image_cardView"
-        android:layout_centerHorizontal="true"
-        android:padding="6dp">
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ui.Home">
 
-
-        <TextView
-            android:id="@+id/name"
+        <androidx.cardview.widget.CardView
+            android:id="@+id/image_cardView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="22dp"
-            android:text="Name"
-            android:textSize="23sp"
-            android:textStyle="bold" />
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="23dp"
+            app:cardCornerRadius="12dp">
 
-        <TextView
-            android:id="@+id/email"
+            <ImageView
+                android:id="@+id/userPhoto"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:src="@drawable/ic_launcher_background" />
+
+        </androidx.cardview.widget.CardView>
+
+        <RelativeLayout
+            android:id="@+id/details"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/name"
-            android:layout_marginTop="22dp"
-            android:text="email"
-            android:textSize="23sp"
-            android:textStyle="bold" />
+            android:layout_below="@+id/image_cardView"
+            android:layout_centerHorizontal="true"
+            android:padding="6dp">
 
-        <TextView
-            android:id="@+id/phone"
+
+            <TextView
+                android:id="@+id/name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="22dp"
+                android:text="Name"
+                android:textSize="23sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/email"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/name"
+                android:layout_marginTop="22dp"
+                android:text="email"
+                android:textSize="23sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/phone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/email"
+                android:layout_marginTop="22dp"
+                android:text="phone"
+                android:textSize="23sp"
+                android:textStyle="bold" />
+
+            <androidx.coordinatorlayout.widget.CoordinatorLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/phone"
+
+                >
+
+                <TextView
+                    android:id="@+id/token"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="22dp"
+                    android:clickable="true"
+                    android:ellipsize="end"
+                    android:ems="@integer/material_motion_duration_medium_1"
+                    android:focusable="true"
+                    android:maxLines="3"
+                    android:text="Token "
+                    android:textSize="23sp"
+                    android:textStyle="bold" />
+
+                <ImageView
+                    android:id="@+id/copyToken"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:src="@drawable/baseline_content_copy_24"
+                    app:layout_anchor="@id/token"
+                    app:layout_anchorGravity="end|bottom"
+
+
+                    />
+            </androidx.coordinatorlayout.widget.CoordinatorLayout>
+        </RelativeLayout>
+
+
+        <Button
+            android:id="@+id/logout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/email"
-            android:layout_marginTop="22dp"
-            android:text="phone"
-            android:textSize="23sp"
-            android:textStyle="bold" />
+            android:layout_below="@+id/details"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="32dp"
+            android:text="Logout"
 
-        <TextView
-            android:id="@+id/token"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/phone"
-            android:layout_marginTop="22dp"
-            android:text="Token"
-            android:textSize="23sp"
-            android:textStyle="bold" />
+            />
+
     </RelativeLayout>
-
-
-    <Button
-        android:id="@+id/logout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/details"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="32dp"
-        android:text="Logout"
-
-        />
-
-</RelativeLayout>
+</androidx.core.widget.NestedScrollView>

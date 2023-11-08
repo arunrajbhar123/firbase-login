@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -102,8 +103,13 @@ public class Login extends AppCompatActivity {
         }
 
         private void firebaseAuth(String idToken) {
-
             AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
+
+            SharedPreferences sharedPreferences = getSharedPreferences("token", MODE_PRIVATE);
+
+            SharedPreferences.Editor myEdit = sharedPreferences.edit();
+            myEdit.putString("token", idToken);
+            myEdit.apply();
             auth.signInWithCredential(credential).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
