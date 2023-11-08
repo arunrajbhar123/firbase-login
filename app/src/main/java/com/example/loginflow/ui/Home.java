@@ -12,6 +12,9 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.example.loginflow.databinding.ActivityHomeBinding;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -24,12 +27,16 @@ public class Home extends AppCompatActivity {
     FirebaseAuth auth;
     ActivityHomeBinding binding;
 
+    GoogleSignInClient googleSignInClient;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityHomeBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
+
+        googleSignInClient = GoogleSignIn.getClient(Home.this, GoogleSignInOptions.DEFAULT_SIGN_IN);
 
 
         auth = FirebaseAuth.getInstance();
@@ -59,8 +66,17 @@ public class Home extends AppCompatActivity {
         binding.logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FirebaseAuth.getInstance().signOut();
-                redirectToLogin();
+                googleSignInClient.signOut().addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            auth.signOut();
+                            redirectToLogin();
+                        }
+                    }
+                });
+
+
             }
         });
 
