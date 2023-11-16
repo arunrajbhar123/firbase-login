@@ -25,11 +25,8 @@ public class MainActivity extends AppCompatActivity {
 
 
         auth = FirebaseAuth.getInstance();
-        if (auth.getCurrentUser() != null) {
-            binding.loginStatus.setText(String.format("%s User is Login", auth.getCurrentUser().getDisplayName()));
-        } else {
-            binding.loginStatus.setText("User is not Login");
-        }
+
+        handleShowText();
 
         binding.loginActivity.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -53,5 +50,17 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+        handleShowText();
+    }
 
+    private void handleShowText() {
+        if (auth.getCurrentUser() != null) {
+            binding.loginStatus.setText(String.format("%s User is Login", auth.getCurrentUser().getDisplayName()));
+        } else {
+            binding.loginStatus.setText("User is not Login");
+        }
+    }
 }
